@@ -5,6 +5,7 @@ import { sqliteConfig } from './infrastructure/database/sqlite-config';
 import { mongoConfig } from './infrastructure/database/mongo-config';
 import { ScooterController } from './interface/controllers/scooter.controller';
 import { AuthModule } from './auth/auth.module';
+import { AppController } from './app.controller'; // ✅ Ajout du contrôleur principal
 
 const isSQL = process.env.DB_TYPE === 'SQL';
 
@@ -13,9 +14,12 @@ const isSQL = process.env.DB_TYPE === 'SQL';
         isSQL
             ? TypeOrmModule.forRoot(sqliteConfig)
             : MongooseModule.forRoot(mongoConfig.uri),
-        AuthModule, // ✅ Correction de l'import d'AuthModule
+        AuthModule,
     ],
-    controllers: [ScooterController],
+    controllers: [
+        AppController, // ✅ Ajout du contrôleur principal
+        ScooterController,
+    ],
     providers: [],
 })
 export class AppModule {}

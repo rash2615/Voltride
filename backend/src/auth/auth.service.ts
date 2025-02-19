@@ -23,8 +23,24 @@ export class AuthService {
     async login(user: any) {
         const payload = { username: user.username, sub: user.id, role: user.role };
         return {
-            access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // 🔹 Expiration du token en 15 minutes
-            refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // 🔹 Refresh token valide 7 jours
+            access_token: this.jwtService.sign(payload, { expiresIn: '15m' }),
+            refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
         };
     }
+
+    async register(username: string, hashedPassword: string, role: string) {
+        if (role !== 'admin' && role !== 'user') {
+            throw new Error('Invalid role. Allowed roles: admin, user');
+        }
+    
+        const id = this.users.length + 1;
+        const newUser = new User(id, username, hashedPassword, role as UserRole);
+        this.users.push(newUser);
+    
+        return { message: 'Utilisateur enregistré avec succès', user: { username, role } };
+    }
+
+    async findUserById(id: number): Promise<User | null> {
+        return this.users.find(user => user.id === id) || null;
+    }    
 }
