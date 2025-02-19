@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    command: >
+      sh -c "npm install && npm run start"
+    environment:
+      - NODE_ENV=development
+      - DB_TYPE=NoSQL
+
+  frontend:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3002:3000"
+    command: >
+      sh -c "npm install && npm start"
+    environment:
+      - NODE_ENV=development
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
