@@ -3,8 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MongooseModule } from '@nestjs/mongoose';
 import { sqliteConfig } from './infrastructure/database/sqlite-config';
 import { mongoConfig } from './infrastructure/database/mongo-config';
-import { ScooterController } from './interface/controllers/scooter.controller';
 import { AuthModule } from './auth/auth.module';
+import { ScooterService } from './scooters/scooter.service';
+import { ScooterController } from './scooters/scooter.controller';
 
 const isSQL = process.env.DB_TYPE === 'SQL';
 
