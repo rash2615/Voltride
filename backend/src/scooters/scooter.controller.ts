@@ -18,27 +18,24 @@ export class ScooterController {
         return this.scooterService.getScooterById(id);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
-    @Post()
-    addScooter(@Body() body: { model: string; batteryLevel: number; latitude: number; longitude: number; status: 'available' | 'in-use' | 'maintenance' }) {
-        return this.scooterService.addScooter(body.model, body.batteryLevel, body.latitude, body.longitude, body.status);
-    }
-
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
-    @Put(':id')
-    updateScooter(
+    @UseGuards(JwtAuthGuard)
+    @Put(':id/location')
+    updateScooterLocation(
         @Param('id') id: number,
-        @Body() body: { batteryLevel?: number; latitude?: number; longitude?: number; status?: 'available' | 'in-use' | 'maintenance' }
+        @Body() body: { latitude: number; longitude: number }
     ) {
-        return this.scooterService.updateScooter(id, body.batteryLevel, body.latitude, body.longitude, body.status);
+        return this.scooterService.updateScooter(id, undefined, body.latitude, body.longitude);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
-    @Delete(':id')
-    deleteScooter(@Param('id') id: number) {
-        return this.scooterService.deleteScooter(id);
+    @UseGuards(JwtAuthGuard)
+    @Put(':id/reserve')
+    reserveScooter(@Param('id') id: number, @Body() body: { userId: number }) {
+        return this.scooterService.reserveScooter(id, body.userId);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Put(':id/release')
+    releaseScooter(@Param('id') id: number, @Body() body: { userId: number }) {
+        return this.scooterService.releaseScooter(id, body.userId);
     }
 }
